@@ -1,0 +1,8 @@
+#BLT
+blt.log
+
+#Python
+__pycache__/
+
+#VSCODE
+.vscode/
