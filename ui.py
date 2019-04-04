@@ -57,7 +57,7 @@ class UIScene:
     def render(self):
         raise NotImplementedError
 
-    def handle_input(self):
+    def handle_input(self, key: int, shift: bool):
         raise NotImplementedError
 
 
@@ -67,10 +67,13 @@ class UIStack:
 
     def push(self, *scenes: UIScene):
         for scene in scenes:
+            scene.enter()
             self.scenes.append(scene)
 
     def pop(self) -> UIScene:
-        return self.scenes.pop()
+        leaving = self.scenes.pop()
+        leaving.exit()
+        return leaving
 
     def render(self):
         for scene in self.scenes:
@@ -78,3 +81,9 @@ class UIStack:
 
     def peek(self) -> UIScene:
         return self.scenes[-1]
+
+
+def write_center(y: int, text: str):
+    screen_w = int(terminal.get("ini.game.screen_width", "100"))
+    x = (screen_w - len(text)) // 2
+    terminal.print_(x, y, text)
