@@ -49,10 +49,10 @@ class UIScene:
         self.name = name
 
     def enter(self):
-        print(f"Entered ${self.name} screen")
+        print(f"Entered {self.name} screen")
 
     def exit(self):
-        print(f"Exited ${self.name} screen")
+        print(f"Exited {self.name} screen")
 
     def render(self):
         raise NotImplementedError
@@ -85,5 +85,17 @@ class UIStack:
 
 def write_center(y: int, text: str):
     screen_w = int(terminal.get("ini.game.screen_width", "100"))
-    x = (screen_w - len(text)) // 2
+    w, _ = terminal.measure(text)
+    x = (screen_w - w) // 2
     terminal.print_(x, y, text)
+
+
+def decorate(text: str, color: str = None, background_color: str = None) -> str:
+    prefix = ''
+    postfix = '[/color]'
+    if color:
+        prefix += f'[color={color}]'
+    if background_color:
+        prefix += f'[bkcolor={background_color}]'
+
+    return f'{prefix}{text}{postfix}'

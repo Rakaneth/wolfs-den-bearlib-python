@@ -12,6 +12,7 @@ def main():
     key = 0
     shift_down = False
 
+    # main game loop
     while key != terminal.TK_CLOSE:
         ui_stack.render()
         terminal.refresh()
@@ -19,6 +20,7 @@ def main():
         shift_down = bool(terminal.check(terminal.TK_SHIFT))
         ui_stack.peek().handle_input(key, shift_down)
 
+    # cleanup
     terminal.close()
 
 
