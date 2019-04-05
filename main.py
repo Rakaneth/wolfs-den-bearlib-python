@@ -20,7 +20,12 @@ def main():
         shift_down = bool(terminal.check(terminal.TK_SHIFT))
         UIManager.peek().handle_input(key, shift_down)
 
+        # if no UIs to show, game is closed
+        if UIManager.empty:
+            break
+
     # cleanup
+    UIManager.clear()  # if the close button was clicked with UIs on the stack
     terminal.close()
 
 

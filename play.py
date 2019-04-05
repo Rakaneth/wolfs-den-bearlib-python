@@ -57,7 +57,7 @@ class PlayScene(UIScene):
             terminal.TK_KP_7: 'NW'
         }
 
-        d = moves[key]
+        d = moves.get(key, None)
 
         if d:
             self.test_e.move_by(d)

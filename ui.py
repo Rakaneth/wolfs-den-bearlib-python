@@ -82,6 +82,14 @@ class UIStack:
     def peek(self) -> UIScene:
         return self.scenes[-1]
 
+    def clear(self):
+        while len(self.scenes) > 0:
+            self.pop()
+
+    @property
+    def empty(self) -> bool:
+        return len(self.scenes) == 0
+
 
 class UIConfig:
     SCREEN_W = 100
@@ -117,11 +125,13 @@ def write_center(y: int, text: str):
 
 def decorate(text: str, color: str = None, background_color: str = None) -> str:
     prefix = ''
-    postfix = '[/color]'
+    postfix = ''
     if color:
         prefix += f'[color={color}]'
     if background_color:
         prefix += f'[bkcolor={background_color}]'
+    if color or background_color:
+        postfix = '[/color]'
 
     return f'{prefix}{text}{postfix}'
 
