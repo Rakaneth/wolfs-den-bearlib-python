@@ -60,6 +60,24 @@ class GameMap:
             if self.get_tile(xs, ys).walk
             if xs != x or ys != y]
 
+    def neighbors_int(self, x: int, y: int) -> int:
+        result = 0
+        dirs = [
+            (0, -1),
+            (1, -1),
+            (1, 0),
+            (1, 1),
+            (0, 1),
+            (-1, 1),
+            (-1, 0),
+            (-1, -1)
+        ]
+        for i, d in enumerate(dirs):
+            dx, dy = d
+            if self.get_tile(x + dx, y + dy).walk:
+                result |= 1 << i
+        return result
+
     def cam(self, x: int, y: int) -> tuple:
         def calc(p: int, m: int, s: int):
             return clamp(p - s // 2, 0, max(0, m-s))

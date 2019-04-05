@@ -24,20 +24,26 @@ class PlayScene(UIScene):
         start_x, start_y = self.test_map.cam(self.test_e.x, self.test_e.y)
         fg = None
         bg = None
+        glyph = 0
+        wall = GameMap.TILES['#']
         for x in range(start_x, start_x + UIConfig.MAP_W):
             for y in range(start_y, start_y + UIConfig.MAP_H):
                 t = self.test_map.get_tile(x, y)
-                if t.name == "wall":
-                    bg = self.test_map.floor_color
+                neis = self.test_map.neighbors_int(x, y)
+                if t.name == "null" and neis > 0:
+                    bg = self.test_map.wall_color
+                    glyph = wall.ascii
                 elif t.name == "floor":
                     bg = self.test_map.floor_color
+                    glyph = t.ascii
                 else:
                     fg = t.fg
                     bg = t.bg
-                if t.name != "null":
+                    glyph = t.ascii
+                if neis > 0:
                     screen_x, screen_y = self.test_map.to_screen(
                         x, y, self.test_e.x, self.test_e.y)
-                    self.map_p.put(screen_x, screen_y, t.ascii, fg, bg)
+                    self.map_p.put(screen_x, screen_y, glyph, fg, bg)
 
         ps_x, ps_y = self.test_map.to_screen(
             self.test_e.x, self.test_e.y, self.test_e.x, self.test_e.y)
