@@ -83,6 +83,31 @@ class UIStack:
         return self.scenes[-1]
 
 
+class UIConfig:
+    SCREEN_W = 100
+    SCREEN_H = 40
+    MAP_W = 60
+    MAP_H = 30
+    MAP_X = 0
+    MAP_Y = 0
+    STAT_W = SCREEN_W - MAP_W
+    STAT_H = MAP_H
+    STAT_X = MAP_W
+    STAT_Y = 0
+    MSG_W = MAP_W // 2
+    MSG_H = SCREEN_H - MAP_H
+    MSG_X = 0
+    MSG_Y = MAP_H
+    SKL_W = MSG_W
+    SKL_H = MSG_H
+    SKL_X = MSG_W
+    SKL_Y = MSG_Y
+    INFO_W = STAT_W
+    INFO_H = MSG_H
+    INFO_X = MAP_W
+    INFO_Y = MSG_Y
+
+
 def write_center(y: int, text: str):
     screen_w = int(terminal.get("ini.game.screen_width", "100"))
     w, _ = terminal.measure(text)
@@ -99,3 +124,6 @@ def decorate(text: str, color: str = None, background_color: str = None) -> str:
         prefix += f'[bkcolor={background_color}]'
 
     return f'{prefix}{text}{postfix}'
+
+
+UIManager = UIStack()

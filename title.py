@@ -1,4 +1,6 @@
-from ui import UIScene, write_center, decorate
+from ui import UIScene, write_center, decorate, UIManager
+from bearlibterminal import terminal
+from play import PlayScene
 
 
 class TitleScene(UIScene):
@@ -12,4 +14,5 @@ class TitleScene(UIScene):
         write_center(23, "Press any key to start")
 
     def handle_input(self, key: int, shift_down: bool):
-        print(f'Key {key} pressed. Shift: {"down" if shift_down else "not down"}')
+        UIManager.pop()
+        UIManager.push(PlayScene())
