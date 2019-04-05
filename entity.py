@@ -2,6 +2,7 @@ from direction import DIRS
 from stats import *
 from typing import List
 from copy import deepcopy
+from ai import AIStack
 
 
 class Entity:
@@ -19,6 +20,9 @@ class Entity:
         self.tags: List[str] = deepcopy(opts.get('tags', []))
         self.enemies: List[str] = deepcopy(opts.get('enemies', []))
         self.allies: List[str] = deepcopy(opts.get('allies', []))
+        self.map_id = "none"
+        self.ai: AIStack = AIStack()
+        self.blocking = False
         glyph = opts.get('glyph', None)
         if type(glyph) is str and len(glyph) == 1:
             self.glyph = ord(glyph)
@@ -59,3 +63,6 @@ class Entity:
 
     def set_player(self):
         self.is_player = True
+
+    def take_action(self):
+        self.ai.take_action(self)
