@@ -1,6 +1,7 @@
 from ui import UIScene, decorate, UIElement, UIConfig
 from bearlibterminal import terminal
 from entity import Entity
+from gamemap import GameMap, generate_caves
 
 
 class PlayScene(UIScene):
@@ -16,10 +17,31 @@ class PlayScene(UIScene):
             UIConfig.SKL_X, UIConfig.SKL_Y, UIConfig.SKL_W, UIConfig.SKL_H, "Skills")
         self.info_p = UIElement(
             UIConfig.INFO_X, UIConfig.INFO_Y, UIConfig.INFO_W, UIConfig.INFO_H, "Info")
+        self.test_map = generate_caves(85, 85, "Mines", "mines")
         self.test_e = Entity()
 
     def render_map(self):
-        self.map_p.put(self.test_e.x, self.test_e.y, self.test_e.glyph)
+        start_x, start_y = self.test_map.cam(self.test_e.x, self.test_e.y)
+        fg = None
+        bg = None
+        for x in range(start_x, start_x + UIConfig.MAP_W):
+            for y in range(start_y, start_y + UIConfig.MAP_H):
+                t = self.test_map.get_tile(x, y)
+                if t.name == "wall":
+                    bg = self.test_map.floor_color
+                elif t.name == "floor":
+                    bg = self.test_map.floor_color
+                else:
+                    fg = t.fg
+                    bg = t.bg
+                if t.name != "null":
+                    screen_x, screen_y = self.test_map.to_screen(
+                        x, y, self.test_e.x, self.test_e.y)
+                    self.map_p.put(screen_x, screen_y, t.ascii, fg, bg)
+
+        ps_x, ps_y = self.test_map.to_screen(
+            self.test_e.x, self.test_e.y, self.test_e.x, self.test_e.y)
+        self.map_p.put(ps_x, ps_y, self.test_e.glyph)
 
     def render_skills(self):
         self.skl_p.border()

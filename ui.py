@@ -14,8 +14,14 @@ class UIElement:
     def print(self, x: int, y: int, text: str):
         terminal.print_(x + self.x, y + self.y, text)
 
-    def put(self, x: int, y: int, code: int):
+    def put(self, x: int, y: int, code: int, fg: str = None, bg: str = None):
+        if fg:
+            terminal.color(fg)
+        if bg:
+            terminal.bkcolor(bg)
         terminal.put(x + self.x, y + self.y, code)
+        terminal.color("white")
+        terminal.bkcolor("black")
 
     def border(self):
         UL = 0x2554

@@ -15,3 +15,6 @@ This will be worked on as time and interest allow. There are a lot of these in v
 
 * Screen interface
 * Moving `@` demo
+* Map display
+* Scrolling
+* Basic caves
