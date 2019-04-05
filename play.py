@@ -2,6 +2,7 @@ from ui import UIScene, decorate, UIElement, UIConfig
 from bearlibterminal import terminal
 from entity import Entity
 from gamemap import GameMap, generate_caves
+from factory import make_creature
 
 
 class PlayScene(UIScene):
@@ -18,7 +19,7 @@ class PlayScene(UIScene):
         self.info_p = UIElement(
             UIConfig.INFO_X, UIConfig.INFO_Y, UIConfig.INFO_W, UIConfig.INFO_H, "Info")
         self.test_map = generate_caves(85, 85, "Mines", "mines")
-        self.test_e = Entity()
+        self.test_e = make_creature('wolf')
 
     def render_map(self):
         start_x, start_y = self.test_map.cam(self.test_e.x, self.test_e.y)

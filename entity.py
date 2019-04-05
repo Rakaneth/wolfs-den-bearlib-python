@@ -1,11 +1,24 @@
 from direction import DIRS
+from stats import *
+from typing import List
+from copy import deepcopy
 
 
 class Entity:
+    COUNTER = 1
+
     def __init__(self, **opts):
         opts = opts or {}
         self.x = 0
         self.y = 0
+        self.energy = 0
+        self.stats: Stats = deepcopy(opts.get('stats', None))
+        self.sec_stats: SecondaryStats = deepcopy(opts.get('sec_stats', None))
+        self.vitals: Vitals = deepcopy(opts.get('vitals', None))
+        self.is_player = False
+        self.tags: List[str] = deepcopy(opts.get('tags', []))
+        self.enemies: List[str] = deepcopy(opts.get('enemies', []))
+        self.allies: List[str] = deepcopy(opts.get('allies', []))
         glyph = opts.get('glyph', None)
         if type(glyph) is str and len(glyph) == 1:
             self.glyph = ord(glyph)
@@ -14,7 +27,11 @@ class Entity:
         else:
             self.glyph = ord('@')
 
-        self.color = opts.get('color', 'white')
+        self.id = Entity.COUNTER
+        Entity.COUNTER += 1
+        self.color = deepcopy(opts.get('color', 'white'))
+        self.name = deepcopy(opts.get('name', 'No name'))
+        self.desc = deepcopy(opts.get('desc', 'No desc'))
 
     def move(self, x, y):
         self.x = x
@@ -24,3 +41,21 @@ class Entity:
         d = DIRS[direction]
         dx, dy = d
         self.move(dx + self.x, dy + self.y)
+
+    def gain_energy(self):
+        if self.stats:
+            self.energy += self.stats.spd
+        else:
+            self.energy += 10
+
+    def spend_energy(self, amt):
+        self.energy -= amt
+
+    def get_spd(self) -> int:
+        if self.stats:
+            return self.stats.spd
+        else:
+            return 0
+
+    def set_player(self):
+        self.is_player = True
