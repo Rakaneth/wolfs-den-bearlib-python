@@ -3,6 +3,7 @@ from typing import List
 from opensimplex import OpenSimplex
 from utils import clamp
 from ui import UIConfig
+from random import randint
 
 
 class MapTile(Tile):
@@ -93,7 +94,7 @@ class GameMap:
 
 def generate_caves(w: int, h: int, name: str, id: str, lit: bool = True) -> GameMap:
     new_map = GameMap(width=w, height=h, name=name, id=id, lit=lit)
-    simp = OpenSimplex()
+    simp = OpenSimplex(seed=randint(0, 1 << 31))
     for x in range(w):
         for y in range(h):
             nx = x / w

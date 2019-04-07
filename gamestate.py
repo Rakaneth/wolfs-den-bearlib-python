@@ -17,7 +17,11 @@ class GameState:
 
     @property
     def cur_things(self) -> List[Entity]:
-        [e for e in self.entities.values() if e.map_id == self.cur_map_id]
+        return [e for e in self.entities.values() if e.map_id == self.cur_map_id]
+    
+    @property
+    def player(self) -> Entity:
+        return next((e for e in self.entities.values() if e.is_player), None)
 
     def things_at(self, x: int, y: int) -> List[Entity]:
         [e for e in self.cur_things if e.x == x and e.y == y]
@@ -36,6 +40,9 @@ class GameState:
     def remove(self, entity: Entity):
         del self.entities[entity.id]
         self.scheduler.remove(entity)
+    
+    def add_map(self, m: GameMap):
+        self.maps[m.id] = m
 
 
 GAME = GameState()

@@ -20,9 +20,10 @@ class Entity:
         self.tags: List[str] = deepcopy(opts.get('tags', []))
         self.enemies: List[str] = deepcopy(opts.get('enemies', []))
         self.allies: List[str] = deepcopy(opts.get('allies', []))
-        self.map_id = "none"
+        self.map_id = opts.get('map_id', "none")
         self.ai: AIStack = AIStack()
         self.blocking = False
+        self.layer = opts.get('layer', 2)
         glyph = opts.get('glyph', None)
         if type(glyph) is str and len(glyph) == 1:
             self.glyph = ord(glyph)

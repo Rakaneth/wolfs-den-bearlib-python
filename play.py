@@ -3,6 +3,8 @@ from bearlibterminal import terminal
 from entity import Entity
 from gamemap import GameMap, generate_caves
 from factory import make_creature
+from gamestate import GAME
+from ai_types import PlayerAI
 
 
 class PlayScene(UIScene):
@@ -18,37 +20,37 @@ class PlayScene(UIScene):
             UIConfig.SKL_X, UIConfig.SKL_Y, UIConfig.SKL_W, UIConfig.SKL_H, "Skills")
         self.info_p = UIElement(
             UIConfig.INFO_X, UIConfig.INFO_Y, UIConfig.INFO_W, UIConfig.INFO_H, "Info")
-        self.test_map = generate_caves(85, 85, "Mines", "mines")
-        self.test_e = make_creature('wolf')
 
     def render_map(self):
-        start_x, start_y = self.test_map.cam(self.test_e.x, self.test_e.y)
+        m = GAME.cur_map
+        p = GAME.player
+        start_x, start_y = m.cam(p.x, p.y)
         fg = None
         bg = None
         glyph = 0
         wall = GameMap.TILES['#']
         for x in range(start_x, start_x + UIConfig.MAP_W):
             for y in range(start_y, start_y + UIConfig.MAP_H):
-                t = self.test_map.get_tile(x, y)
-                neis = self.test_map.neighbors_int(x, y)
+                t = m.get_tile(x, y)
+                neis = m.neighbors_int(x, y)
                 if t.name == "null" and neis > 0:
-                    bg = self.test_map.wall_color
+                    bg = m.wall_color
                     glyph = wall.ascii
                 elif t.name == "floor":
-                    bg = self.test_map.floor_color
+                    bg = m.floor_color
                     glyph = t.ascii
                 else:
                     fg = t.fg
                     bg = t.bg
                     glyph = t.ascii
                 if neis > 0:
-                    screen_x, screen_y = self.test_map.to_screen(
-                        x, y, self.test_e.x, self.test_e.y)
+                    screen_x, screen_y = m.to_screen( x, y, p.x, p.y)
                     self.map_p.put(screen_x, screen_y, glyph, fg, bg)
 
-        ps_x, ps_y = self.test_map.to_screen(
-            self.test_e.x, self.test_e.y, self.test_e.x, self.test_e.y)
-        self.map_p.put(ps_x, ps_y, self.test_e.glyph)
+        for e in sorted(GAME.cur_things, key=lambda a: a.layer, reverse=True):
+            ps_x, ps_y = m.to_screen(e.x, e.y, e.x, e.y)
+            if 0 <= ps_x < UIConfig.MAP_W and 0 <= ps_y < UIConfig.MAP_H:
+                self.map_p.put(ps_x, ps_y, e.glyph, e.color)
 
     def render_skills(self):
         self.skl_p.border()
@@ -89,6 +91,19 @@ class PlayScene(UIScene):
         d = moves.get(key, None)
 
         if d:
-            self.test_e.move_by(d)
+            GAME.player.move_by(d)
         else:
             print(f'Key {key} was pressed.')
+    
+    def enter(self):
+        player=Entity(layer=4, color='cyan', map_id="mines")
+        player.set_player()
+        player.ai.push(PlayerAI())
+        player.move(1, 1)
+        wolf = make_creature('wolf', color='yellow', map_id="mines")
+        mines = generate_caves(85, 85, "Mines", "mines")
+        GAME.add_map(mines)
+        GAME.add(player)
+        GAME.add(wolf)
+        GAME.cur_map_id = "mines"
+        UIScene.enter(self)

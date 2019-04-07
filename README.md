@@ -20,3 +20,4 @@ This will be worked on as time and interest allow. There are a lot of these in v
 * Basic caves
 * Basic entities
 * Scheduler scaffolding
+* Gamestate
