@@ -1,6 +1,7 @@
 from bearlibterminal import terminal
 from ui import UIStack, UIManager
 from title import TitleScene
+from gamestate import GAME
 
 
 def main():
@@ -16,9 +17,11 @@ def main():
         terminal.clear()
         UIManager.render()
         terminal.refresh()
+        GAME.scheduler.process()
         key = terminal.read()
         shift_down = bool(terminal.check(terminal.TK_SHIFT))
-        UIManager.peek().handle_input(key, shift_down)
+        player_cmd = UIManager.peek().handle_input(key, shift_down)
+        GAME.player.push_player_action(player_cmd)
 
         # if no UIs to show, game is closed
         if UIManager.empty:

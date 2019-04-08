@@ -1,4 +1,5 @@
 from bearlibterminal import terminal
+from commands import Command
 
 
 class UIElement:
@@ -63,7 +64,7 @@ class UIScene:
     def render(self):
         raise NotImplementedError
 
-    def handle_input(self, key: int, shift: bool):
+    def handle_input(self, key: int, shift: bool) -> Command:
         raise NotImplementedError
 
 

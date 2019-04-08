@@ -3,6 +3,8 @@ from stats import *
 from typing import List
 from copy import deepcopy
 from ai import AIStack
+from ai_types import PlayerAI
+from commands import Command
 
 
 class Entity:
@@ -56,6 +58,7 @@ class Entity:
     def spend_energy(self, amt):
         self.energy -= amt
 
+    @property
     def get_spd(self) -> int:
         if self.stats:
             return self.stats.spd
@@ -65,5 +68,11 @@ class Entity:
     def set_player(self):
         self.is_player = True
 
-    def take_action(self):
-        self.ai.take_action(self)
+    def take_action(self) -> Command:
+        return self.ai.take_action(self)
+
+    def push_player_action(self, cmd):
+        for a in self.ai:
+            if isinstance(a, PlayerAI):
+                a.provide_cmd(cmd)
+                break

@@ -1,4 +1,5 @@
 from typing import List
+from commands import Command, OutOfWorldCommand
 
 
 class AI:
@@ -8,13 +9,16 @@ class AI:
     def exit(self):
         pass
 
-    def take_action(self, actor):
-        pass
+    def take_action(self, actor) -> Command:
+        return OutOfWorldCommand()
 
 
 class AIStack:
     def __init__(self):
         self.ai_stack: List[AI] = []
+
+    def __iter__(self):
+        return iter(self.ai_stack)
 
     def push(self, ai: AI):
         ai.enter()
@@ -28,8 +32,8 @@ class AIStack:
     def peek(self) -> AI:
         return self.ai_stack[-1]
 
-    def take_action(self, actor):
-        self.peek().take_action(actor)
+    def take_action(self, actor) -> Command:
+        return self.peek().take_action(actor)
 
     @property
     def empty(self) -> bool:

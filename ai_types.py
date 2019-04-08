@@ -1,11 +1,19 @@
 from ai import AI
 from gamestate import GAME
 from random import choice
+from commands import Command
 
 
 class PlayerAI(AI):
+    def __init__(self):
+        self.player_cmd: Command = None
+
     def take_action(self):
         GAME.pause()
+
+    def provide_cmd(self, cmd: Command):
+        self.player_cmd = cmd
+        GAME.resume()
 
 
 class WanderAI(AI):
