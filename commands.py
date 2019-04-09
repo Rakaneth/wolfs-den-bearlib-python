@@ -1,4 +1,5 @@
 from entity import Entity
+from gamestate import GameState
 
 
 class Command:
@@ -21,10 +22,10 @@ class MoveByCommand(Command):
         self.dx = dx
         self.dy = dy
 
-    def execute(self, entity: Entity) -> int:
+    def execute(self, entity: Entity, game: GameState) -> CommandResult:
         # TODO: try-move logic
-        nx = entity.x + dx
-        ny = entity.y + dy
+        nx = entity.x + self.dx
+        ny = entity.y + self.dy
         # if entity.g
         return 100
 
