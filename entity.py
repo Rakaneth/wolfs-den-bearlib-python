@@ -26,6 +26,7 @@ class Entity:
         self.ai: AIStack = AIStack()
         self.blocking = False
         self.layer = opts.get('layer', 2)
+        self.needs_input = False
         glyph = opts.get('glyph', None)
         if type(glyph) is str and len(glyph) == 1:
             self.glyph = ord(glyph)

@@ -2,8 +2,18 @@ from entity import Entity
 
 
 class Command:
-    def execute(self, entity: Entity) -> int:
-        return 0
+    def execute(self, entity: Entity):
+        pass
+
+
+class CommandResult:
+    def __init__(self, energy_cost: int = 100, alt_cmd: Command = None):
+        self.alternate: Command = alt_cmd
+        if alt_cmd:
+            self.__done = False
+        else:
+            self.__done = True
+        self.cost = energy_cost
 
 
 class MoveByCommand(Command):
@@ -13,8 +23,9 @@ class MoveByCommand(Command):
 
     def execute(self, entity: Entity) -> int:
         # TODO: try-move logic
-        entity.x += self.dx
-        entity.y += self.dy
+        nx = entity.x + dx
+        ny = entity.y + dy
+        # if entity.g
         return 100
 
 

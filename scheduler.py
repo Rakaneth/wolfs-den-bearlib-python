@@ -12,12 +12,12 @@ class Scheduler:
         self.__clock = 0.0
 
     def process(self):
-        while self.running:
+        while True:
             cur_actor = self.actors.pop()
             cur_actor.gain_energy()
             if cur_actor.energy >= Scheduler.ACTION_REQ_ENERGY:
-                if cur_actor.is_player:
-                    self.running = False
+                if cur_actor.is_player and cur_actor.needs_input:
+                    return
                 else:
                     cmd = cur_actor.take_action()
                     process_command(cur_actor, cmd)
